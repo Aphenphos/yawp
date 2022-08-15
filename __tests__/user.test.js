@@ -31,6 +31,13 @@ describe('tests user routes', () => {
       email
     });
   });
+  it('logs in existing user', async () => {
+    await request(app).post('/api/v1/users').send(fakeUser);
+    const res = await request(app)
+      .post('/api/v1/users/sessions')
+      .send({ email: 'mrman@man.com', password: 'imtheman' });
+    expect(res.status).toEqual(200);
+  });
   afterAll(() => {
     pool.end();
   });
