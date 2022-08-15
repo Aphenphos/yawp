@@ -1,10 +1,7 @@
 -- Use this file to define your SQL tables
 -- The SQL in this file will be executed when you run `npm run setup-db`\
-drop table if exists users;
-drop table if exists restaurants;
-drop table if exists restaurants_reviews;
 
-create table users (
+create table yawp_users (
     id bigint generated always as identity primary key,
     first_name text not null,
     last_name text not null,
@@ -21,6 +18,8 @@ create table restaurants (
 create table restaurants_reviews (
     id bigint generated always as identity primary key,
     star_rating int not null,
+    restaurant_id bigint,
+    user_id bigint,
     foreign key (restaurant_id) references restaurants(id),
-    foreign key (user_id) references users(id)
+    foreign key (user_id) references yawp_users(id)
 );
