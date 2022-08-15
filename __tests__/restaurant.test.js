@@ -3,6 +3,7 @@ const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/UserService');
+const Restaurant = require('../lib/models/Restaurant');
 
 const fakeUser = {
   firstName: 'Mr',
@@ -30,16 +31,20 @@ describe('backend-express-template routes', () => {
   });
 
   it('should make sure restaurants are got properly', async () => {
-    const [agent, user] = await logIn();
-    console.log(user);
-    const resp = await agent.get('/api/v1/restaurants');
-  
-    expect(resp.body).toEqual([]);
+    const resp = await request(app).get('/api/v1/restaurants');
+    expect(resp.status).toEqual(200);
+    expect(resp.body.length).toEqual(2);
   });
 
   it('returns specific restaurant page', async () => {
-    const res = await request(app).get('/api/v1/restaurants/3');
+    const res = await request(app).get('/api/v1/restaurants/2');
     expect(res.status).toEqual(200);
+    expect(res.body).toEqual({
+      id: '2',
+      name: 'BurgerKing',
+      food_type: 'Burgers',
+      restaurants_reviews: expect.any(Array)
+    });
   });
 
   it('posts a new restaurant', async () => {
@@ -47,7 +52,6 @@ describe('backend-express-template routes', () => {
       .post('/api/v1/restaurants')
       .send({ name: 'Burger King', food_type: 'Burgers' });
     expect(resp.status).toBe(200);
-    console.log(resp.body);
     expect(resp.body).toEqual({
       id: expect.any(String),
       name: 'Burger King',

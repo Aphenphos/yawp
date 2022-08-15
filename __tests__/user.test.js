@@ -10,6 +10,24 @@ const fakeUser = {
   email: 'mrman@man.com',
   password: 'imtheman'
 };
+const adminUser = {
+  firstName: 'admin',
+  lastName: 'admin',
+  email: 'admin@admin',
+  password: 'admin'
+};
+
+const logIn = async (userInfo = {}) => {
+  const password = userInfo.password;
+  const agent = request.agent(app);
+
+  const user = await UserService.create({ ...userInfo });
+
+  const { email } = user;
+  await agent.post('/api/v1/users/sessions').send({ email, password });
+  return [agent, user];
+};
+
 
 
 describe('tests user routes', () => {
@@ -17,8 +35,9 @@ describe('tests user routes', () => {
     return setup(pool);
   });
   it('returns the users', async () => {
-    const resp = await request(app).get('/api/v1/users');
-    expect(resp.status).toBe(401);
+    const [agent] = await logIn(adminUser);
+    const resp = await agent.get('/api/v1/users');
+    expect(resp.status).toBe(200);
   });
   it('makes a new user', async () => {
     const res = await request(app).post('/api/v1/users').send(fakeUser);
@@ -38,7 +57,7 @@ describe('tests user routes', () => {
       .send({ email: 'mrman@man.com', password: 'imtheman' });
     expect(res.status).toEqual(200);
   });
-  
+
   afterAll(() => {
     pool.end();
   });

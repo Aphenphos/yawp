@@ -27,3 +27,38 @@ create table restaurants_reviews (
     foreign key (restaurant_id) references restaurants(id),
     foreign key (user_id) references yawp_users(id)
 );
+
+
+insert into yawp_users (
+    first_name,
+    last_name,
+    email,
+    password_hash
+)
+values
+    ('Geg', 'Um', 'geg@geg', '123'),
+    ('Deg', 'Bum', 'gerg@grg', '123'),
+    ('admin', 'admin', 'admin@admin', 'admin')
+;
+
+insert into restaurants (
+    name,
+    food_type
+)
+values
+    ('McDonalds', 'Burger'),
+    ('BurgerKing', 'Burgers')
+;
+
+insert into restaurants_reviews (
+    star_rating,
+    restaurant_id,
+    user_id
+)
+values
+    ('5', '1', '2'),
+    ('4', '1', '1'),
+    ('3', '2', '1'),
+    ('2', '2', '2')
+;
+
