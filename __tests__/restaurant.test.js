@@ -57,7 +57,20 @@ describe('backend-express-template routes', () => {
       name: 'Burger King',
       food_type: 'Burgers'
     });
-  });  
+  }); 
+  it('posts a new restaurant review', async () => {
+    const [agent] = await logIn(fakeUser);
+    const resp = await agent
+      .post('/api/v1/restaurants/2/reviews')
+      .send({ star_rating: 5 });
+    expect(resp.status).toBe(200);
+    expect(resp.body).toEqual({
+      id: expect.any(String),
+      star_rating: 5,
+      restaurant_id: expect.any(String),
+      user_id: expect.any(String)
+    });
+  }); 
 
   afterAll(() => {
     pool.end();
