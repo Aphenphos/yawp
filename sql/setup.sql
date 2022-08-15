@@ -9,7 +9,7 @@ create table users (
     first_name text not null,
     last_name text not null,
     email text not null,
-    -- password_hash text not null // if doing oauth bonus
+    password_hash text not null
 );
 
 create table restaurants (
@@ -24,22 +24,3 @@ create table restaurants_reviews (
     foreign key (restaurant_id) references restaurants(id),
     foreign key (user_id) references users(id)
 );
-
-insert into users (
-    first_name,
-    last_name,
-    email
-)
-values
-    ('Squilliam', 'Fancyson', 'Squil@fancy.com'),
-    ('Billiam', 'Smith', 'Billiam@smith.com')
-;
-
-insert into restaurants (
-    name,
-    food_type
-)
-values
-    ('Mcdonalds', 'McChickens'),
-    ('Taco Bell', 'Taco')
-;
