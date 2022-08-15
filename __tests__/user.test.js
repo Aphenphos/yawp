@@ -38,6 +38,7 @@ describe('tests user routes', () => {
       .send({ email: 'mrman@man.com', password: 'imtheman' });
     expect(res.status).toEqual(200);
   });
+  
   afterAll(() => {
     pool.end();
   });

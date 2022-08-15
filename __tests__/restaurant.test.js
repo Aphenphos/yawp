@@ -28,13 +28,33 @@ describe('backend-express-template routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
-  it('should make sure secrets are got properly', async () => {
+
+  it('should make sure restaurants are got properly', async () => {
     const [agent, user] = await logIn();
     console.log(user);
     const resp = await agent.get('/api/v1/restaurants');
   
     expect(resp.body).toEqual([]);
   });
+
+  it('returns specific restaurant page', async () => {
+    const res = await request(app).get('/api/v1/restaurants/3');
+    expect(res.status).toEqual(200);
+  });
+
+  it('posts a new restaurant', async () => {
+    const resp = await request(app)
+      .post('/api/v1/restaurants')
+      .send({ name: 'Burger King', food_type: 'Burgers' });
+    expect(resp.status).toBe(200);
+    console.log(resp.body);
+    expect(resp.body).toEqual({
+      id: expect.any(String),
+      name: 'Burger King',
+      food_type: 'Burgers'
+    });
+  });  
+
   afterAll(() => {
     pool.end();
   });
