@@ -72,6 +72,15 @@ describe('backend-express-template routes', () => {
     });
   }); 
 
+  it('deletes a review', async () => {
+    const [agent] = await logIn(fakeUser);
+    const resp = await agent.delete('/api/v1/reviews/1');
+    expect(resp.status).toBe(200);
+
+    const reviewResp = await agent.get('/api/v1/reviews/1');
+    expect(reviewResp.status).toBe(404);
+  });
+
   afterAll(() => {
     pool.end();
   });
