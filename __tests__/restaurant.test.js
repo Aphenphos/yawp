@@ -89,7 +89,6 @@ describe('backend-express-template routes', () => {
     const { email, password } = fakeUser;
     await agent.post('/api/v1/users/sessions').send({ email, password });
     const resp = await agent.delete('/api/v1/reviews/1');
-    console.log(resp.body);
     expect(resp.status).toBe(200);
     const reviewResp = await agent.get('/api/v1/reviews/1');
     expect(reviewResp.status).toBe(404);
