@@ -11,6 +11,12 @@ const fakeUser = {
   email: 'mrman@man.com',
   password: 'imtheman'
 };
+const adminUser = {
+  firstName: 'admin',
+  lastName: 'admin',
+  email: 'admin@admin',
+  password: 'admin'
+};
 
 const logIn = async (userInfo = {}) => {
   const password = userInfo.password ?? fakeUser.password;
@@ -55,28 +61,36 @@ describe('backend-express-template routes', () => {
     expect(resp.body).toEqual({
       id: expect.any(String),
       name: 'Burger King',
-      food_type: 'Burgers'
+      food_type: 'Burgers',
+      restaurants_reviews: []
     });
   }); 
   it('posts a new restaurant review', async () => {
-    const [agent] = await logIn(fakeUser);
+    const agent = request.agent(app);
+    await agent.post('/api/v1/users').send(fakeUser);
+    const { email, password } = fakeUser;
+    await agent.post('/api/v1/users/sessions').send({ email, password });
     const resp = await agent
       .post('/api/v1/restaurants/2/reviews')
-      .send({ star_rating: 5 });
+      .send({ star_rating: 5, detail: 'disgusting' });
     expect(resp.status).toBe(200);
     expect(resp.body).toEqual({
       id: expect.any(String),
       star_rating: 5,
+      detail: 'disgusting',
       restaurant_id: expect.any(String),
       user_id: expect.any(String)
     });
   }); 
 
   it('deletes a review', async () => {
-    const [agent] = await logIn(fakeUser);
+    const agent = request.agent(app);
+    await agent.post('/api/v1/users').send(fakeUser);
+    const { email, password } = fakeUser;
+    await agent.post('/api/v1/users/sessions').send({ email, password });
     const resp = await agent.delete('/api/v1/reviews/1');
+    console.log(resp.body);
     expect(resp.status).toBe(200);
-
     const reviewResp = await agent.get('/api/v1/reviews/1');
     expect(reviewResp.status).toBe(404);
   });

@@ -22,8 +22,9 @@ create table restaurants (
 create table restaurants_reviews (
     id bigint generated always as identity primary key,
     star_rating int not null,
-    restaurant_id bigint,
-    user_id bigint,
+    detail text not null,
+    restaurant_id bigint not null,
+    user_id bigint not null,
     foreign key (restaurant_id) references restaurants(id),
     foreign key (user_id) references yawp_users(id)
 );
@@ -37,8 +38,7 @@ insert into yawp_users (
 )
 values
     ('Geg', 'Um', 'geg@geg', '123'),
-    ('Deg', 'Bum', 'gerg@grg', '123'),
-    ('admin', 'admin', 'admin@admin', 'admin')
+    ('Deg', 'Bum', 'gerg@grg', '123')
 ;
 
 insert into restaurants (
@@ -52,13 +52,14 @@ values
 
 insert into restaurants_reviews (
     star_rating,
+    detail,
     restaurant_id,
     user_id
 )
 values
-    ('5', '1', '2'),
-    ('4', '1', '1'),
-    ('3', '2', '1'),
-    ('2', '2', '2')
+    ('5', 'sucks', '1', '2'),
+    ('4', 'great','1', '1'),
+    ('3', 'gross','2', '1'),
+    ('2', 'amazing','2', '2')
 ;
 
