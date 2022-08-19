@@ -2,32 +2,12 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
-const UserService = require('../lib/services/UserService');
-const Restaurant = require('../lib/models/Restaurant');
 
 const fakeUser = {
   firstName: 'Mr',
   lastName: 'Man',
   email: 'mrman@man.com',
   password: 'imtheman'
-};
-const adminUser = {
-  firstName: 'admin',
-  lastName: 'admin',
-  email: 'admin@admin',
-  password: 'admin'
-};
-
-const logIn = async (userInfo = {}) => {
-  const password = userInfo.password ?? fakeUser.password;
-
-  const agent = request.agent(app);
-
-  const user = await UserService.create({ ...fakeUser });
-
-  const { email } = user;
-  await agent.post('/api/v1/users/sessions').send({ email, password });
-  return [agent, user];
 };
 
 
@@ -62,7 +42,6 @@ describe('backend-express-template routes', () => {
       id: expect.any(String),
       name: 'Burger King',
       food_type: 'Burgers',
-      restaurants_reviews: []
     });
   }); 
   it('posts a new restaurant review', async () => {
