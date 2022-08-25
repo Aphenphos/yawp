@@ -17,37 +17,24 @@ const adminUser = {
   password: 'admin'
 };
 
-const logIn = async (userInfo = {}) => {
-  const password = userInfo.password;
-  const agent = request.agent(app);
-
-  const user = await UserService.create({ ...userInfo });
-
-  const { email } = user;
-  await agent.post('/api/v1/users/sessions').send({ email, password });
-  return [agent, user];
-};
-
-
 
 describe('tests user routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
   it('returns the users', async () => {
-    const [agent] = await logIn(adminUser);
+    const agent = request.agent(app);
+
+    await UserService.create({ ...adminUser });
+    await agent.post('/api/v1/users/sessions').send({ email:'admin@admin', password:'admin' });
     const resp = await agent.get('/api/v1/users');
     expect(resp.status).toBe(200);
   });
   it('makes a new user', async () => {
     const res = await request(app).post('/api/v1/users').send(fakeUser);
-    const { firstName, lastName, email } = fakeUser;
 
     expect(res.body).toEqual({
-      id: expect.any(String),
-      firstName,
-      lastName,
-      email
+      message: 'Signed In'
     });
   });
   it('logs in existing user', async () => {

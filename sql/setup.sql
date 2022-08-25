@@ -21,7 +21,7 @@ create table restaurants (
 
 create table restaurants_reviews (
     id bigint generated always as identity primary key,
-    star_rating int not null,
+    stars int not null,
     detail text not null,
     restaurant_id bigint not null,
     user_id bigint not null,
@@ -51,7 +51,7 @@ values
 ;
 
 insert into restaurants_reviews (
-    star_rating,
+    stars,
     detail,
     restaurant_id,
     user_id

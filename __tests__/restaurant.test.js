@@ -51,11 +51,11 @@ describe('backend-express-template routes', () => {
     await agent.post('/api/v1/users/sessions').send({ email, password });
     const resp = await agent
       .post('/api/v1/restaurants/2/reviews')
-      .send({ star_rating: 5, detail: 'disgusting' });
+      .send({ stars: 5, detail: 'disgusting' });
     expect(resp.status).toBe(200);
     expect(resp.body).toEqual({
       id: expect.any(String),
-      star_rating: 5,
+      stars: 5,
       detail: 'disgusting',
       restaurant_id: expect.any(String),
       user_id: expect.any(String)
